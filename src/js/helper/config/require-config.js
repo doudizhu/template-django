@@ -2,7 +2,7 @@
  * Created by lipeng on 17/2/16.
  */
 require.config({
-    baseUrl: '/dist/js/',
+    baseUrl: '/static/js/',
     shim: {
         // 一.类库依赖关系
         // 1.代码库

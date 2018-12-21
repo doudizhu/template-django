@@ -15,38 +15,39 @@ const path = {
         // 编译（部分文件）
         src:'src/pug/**/[^_]*.pug',
         // 生成（编译文件）
-        dist:'dist/pages',
+        // static:'static/pages',
+        static:'templates',
         // *监控（全部文件）
         watch:'src/pug/**/*.pug',
     },
 
     cssPages:{
         src:'src/sass/pages/**/*.sass',
-        dist:'dist/css',
+        static:'static/css',
         watch:'src/sass/**/*.sass'
     },
     cssVendor:{
         src:'src/sass/vendor/**/*.sass',
-        dist:'dist/css',
+        static:'static/css',
     },
 
 
     jsPages:{
         src:'src/js/pages/**/*.js',
-        dist:'dist/js/pages',
+        static:'static/js/pages',
     },
     jsHelper:{
         src:'src/js/helper/**/*.js',
-        dist:'dist/js/helper'
+        static:'static/js/helper'
     },
     jsVendor:{
         src:'src/js/vendor/**/*.js',
-        dist:'dist/js/vendor'
+        static:'static/js/vendor'
     },
 
     img:{
         src:'src/img/**/*',
-        dist:'dist/img'
+        static:'static/img'
     }
 };
 
@@ -74,7 +75,7 @@ gulp.task('watch',function () {
             directory = path.slice(path.lastIndexOf("src")+4,path.lastIndexOf("/")+1);
         gulp.src(path)
             .pipe(plumber({errorHandler: notify.onError('Error: <%= error %>')}))
-            .pipe(gulp.dest('dist/' +directory))
+            .pipe(gulp.dest('static/' +directory))
         console.timeEnd("take");
     });
     gulp.watch(path.jsHelper.src,['jsHelperDevelop']);
@@ -88,7 +89,7 @@ gulp.task('watch',function () {
 gulp.task('pug',()=>{
     return gulp.src(path.pug.src)
         .pipe(pug({pretty:false}))
-        .pipe(gulp.dest(path.pug.dist));
+        .pipe(gulp.dest(path.pug.static));
 });
 
 gulp.task('cssPages',()=> {
@@ -96,7 +97,7 @@ gulp.task('cssPages',()=> {
         .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
         .pipe(compass({
             config_file: './config.rb', //配置中文编码支持
-            css:path.cssPages.dist,
+            css:path.cssPages.static,
             sass:'src/sass',
             style:'compressed',
             sourcemap:false,
@@ -109,7 +110,7 @@ gulp.task('cssVendor',()=> {
         .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
         .pipe(compass({
             config_file: './config.rb',
-            css:path.cssVendor.dist,
+            css:path.cssVendor.static,
             sass:'src/sass',
             style:'compressed',
             sourcemap:false,
@@ -121,42 +122,42 @@ gulp.task('jsHelper',()=>{
     return gulp.src(path.jsHelper.src)
         .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
         .pipe(minJs())
-        .pipe(gulp.dest(path.jsHelper.dist));
+        .pipe(gulp.dest(path.jsHelper.static));
 });
 gulp.task('jsPages',()=>{
     return gulp.src(path.jsPages.src)
         .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
         .pipe(minJs())
-        .pipe(gulp.dest(path.jsPages.dist));
+        .pipe(gulp.dest(path.jsPages.static));
 });
 gulp.task('jsVendor',()=>{
     return gulp.src(path.jsVendor.src)
         .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
         .pipe(minJs())
-        .pipe(gulp.dest(path.jsVendor.dist));
+        .pipe(gulp.dest(path.jsVendor.static));
 });
 // 图片资源开发与生产环境分离
 gulp.task('imgCopy',()=>{
     return gulp.src(path.img.src)
         .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
-        .pipe(gulp.dest(path.img.dist));
+        .pipe(gulp.dest(path.img.static));
 });
 
 // 开发环境编译
 gulp.task('jsHelperDevelop',()=>{
     return gulp.src(path.jsHelper.src)
         .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
-        .pipe(gulp.dest(path.jsHelper.dist));
+        .pipe(gulp.dest(path.jsHelper.static));
 });
 gulp.task('jsPagesDevelop',()=>{ 
     return gulp.src(path.jsPages.src)
         .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
-        .pipe(gulp.dest(path.jsPages.dist));
+        .pipe(gulp.dest(path.jsPages.static));
 });
 gulp.task('jsVendorDevelop',()=>{
     return gulp.src(path.jsVendor.src)
         .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
-        .pipe(gulp.dest(path.jsVendor.dist));
+        .pipe(gulp.dest(path.jsVendor.static));
 });
 
 gulp.task('default',["dev"]); //定义默认任务
